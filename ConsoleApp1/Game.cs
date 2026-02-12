@@ -1,5 +1,4 @@
 ﻿global using Spectre.Console;
-using System.Diagnostics;
 
 Game game = new();
 

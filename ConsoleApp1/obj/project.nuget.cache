@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "KJXRYStl/yg=",
+  "dgSpecHash": "J7cdck9Jmuk=",
   "success": true,
-  "projectFilePath": "c:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
+  "projectFilePath": "c:\\Users\\voidl\\Downloads\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\mathias.glansholm\\.nuget\\packages\\spectre.console\\0.54.0\\spectre.console.0.54.0.nupkg.sha512"
+    "C:\\Users\\voidl\\.nuget\\packages\\spectre.console\\0.54.0\\spectre.console.0.54.0.nupkg.sha512"
   ],
   "logs": []
 }

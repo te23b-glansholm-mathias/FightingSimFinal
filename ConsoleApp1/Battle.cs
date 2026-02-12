@@ -115,7 +115,7 @@ class EnemySpawner
         switch (table)
         {
             case "World_1":
-                ActiveEnemies.Add(new Slime("Slime (L)", 10, 4, 0, 3, this));
+                ActiveEnemies.Add(new Slime("Slime (L)", this));
                 break;
         }
     }

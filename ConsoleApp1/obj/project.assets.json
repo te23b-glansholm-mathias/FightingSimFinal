@@ -46,24 +46,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\mathias.glansholm\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\voidl\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
+      "projectUniqueName": "C:\\Users\\voidl\\Downloads\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
       "projectName": "ConsoleApp1",
-      "projectPath": "C:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
-      "packagesPath": "C:\\Users\\mathias.glansholm\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\obj\\",
+      "projectPath": "C:\\Users\\voidl\\Downloads\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
+      "packagesPath": "C:\\Users\\voidl\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\voidl\\Downloads\\FightingSimFinal\\ConsoleApp1\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\mathias.glansholm\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\voidl\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -116,7 +111,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

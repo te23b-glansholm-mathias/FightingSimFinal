@@ -1,48 +1,76 @@
-abstract class Enemy(string name, int health, int rawDamage, int defense)
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
+
+delegate void Attack(Player target, Enemy sender);
+
+abstract class Enemy(string name)
 {
     public string Name { get; } = name;
-    public int RawDamage { get; } = rawDamage;
-    public int Defense { get; } = defense;
+    public int RawDamage { get; protected set; }
+    public int Defense { get; protected set; }
 
-    private int _health = health;
+    protected Attacks Attacks = new();
+    protected List<Attack> AttacksOwned = [];
 
+    private int _health;
     public int Health
     {
         get => _health;
-        private set
+        protected set
         {
-            _health -= value;
+            _health = value;
             if (_health <= 0) OnDeath();
         }
     }
 
     public abstract void AttackPlayer(Player target);
     public abstract void OnDeath();
-    Attacks attacks = new();
 
     public virtual void TakeDamage(int Amount)
     {
-        Health = (int)(Amount * (100.0 / (100 + Defense)));
+        int reducedDamage = (int)(Amount * (100.0 / (100 + Defense)));
+        Health -= reducedDamage;
     }
 }
 
-class Slime(string name, int health, int rawDamage, int defense, int size, EnemySpawner enemySpawner) : Enemy(name, health, rawDamage, defense)
+class Slime : Enemy
 {
-    public override void AttackPlayer(Player target)
+    private EnemySpawner EnemySpawner;
+    private int size;
+
+    public Slime(string name, EnemySpawner EnemySpawner) : base(name)
     {
-        target.TakeDamage(RawDamage);
-
-        switch (Random.Shared.Next(1, 100))
+        switch (Name)
         {
-            case <= 33:
+            case "Slime (L)":
+                AttacksOwned.AddRange(Attacks.Clash);
+                size = 3;
+                Health = 100;
+                RawDamage = 6;
+                Defense = 1;
                 break;
 
-            case <= 66:
+            case "Slime (M)":
+                AttacksOwned.AddRange(Attacks.Bounce, Attacks.Splash);
+                size = 2;
+                Health = 10;
+                RawDamage = 4;
+                Defense = 0;
                 break;
 
-            case <= 100:
+            case "Slime (S)":
+                AttacksOwned.Add(Attacks.Splash);
+                size = 1;
+                Health = 10;
+                RawDamage = 4;
+                Defense = 0;
                 break;
         }
+    }
+
+    public override void AttackPlayer(Player target)
+    {
+        AttacksOwned[Random.Shared.Next(0, AttacksOwned.Count)](target, this);
     }
 
     public override void OnDeath()
@@ -50,36 +78,35 @@ class Slime(string name, int health, int rawDamage, int defense, int size, Enemy
         switch (size)
         {
             case 3:
-                enemySpawner.ActiveEnemies.Add(new Slime("Slime (M)", 10, 4, 0, 2, enemySpawner));
-                enemySpawner.ActiveEnemies.Add(new Slime("Slime (M)", 10, 4, 0, 2, enemySpawner));
+                EnemySpawner.ActiveEnemies.Add(new Slime("Slime (M)", EnemySpawner));
+                EnemySpawner.ActiveEnemies.Add(new Slime("Slime (M)", EnemySpawner));
                 break;
+
             case 2:
-                enemySpawner.ActiveEnemies.Add(new Slime("Slime (S)", 10, 4, 0, 1, enemySpawner));
-                enemySpawner.ActiveEnemies.Add(new Slime("Slime (S)", 10, 4, 0, 1, enemySpawner));
-                enemySpawner.ActiveEnemies.Add(new Slime("Slime (S)", 10, 4, 0, 1, enemySpawner));
+                EnemySpawner.ActiveEnemies.Add(new Slime("Slime (S)", EnemySpawner));
+                EnemySpawner.ActiveEnemies.Add(new Slime("Slime (S)", EnemySpawner));
+                EnemySpawner.ActiveEnemies.Add(new Slime("Slime (S)", EnemySpawner));
                 break;
         }
 
-        enemySpawner.ActiveEnemies.Remove(this);
+        EnemySpawner.ActiveEnemies.Remove(this);
     }
 }
 
 class Attacks()
 {
-    public delegate void Attack(Player target, Enemy sender);
-
-    public void Clash(Player target, Enemy sender)
+    public Attack Clash = (target, sender) =>
     {
         target.TakeDamage(sender.RawDamage * 3);
-    }
+    };
 
-    public void Bounce(Player target, Enemy sender)
+    public Attack Bounce = (target, sender) =>
     {
         target.TakeDamage((int)(sender.RawDamage * 1.5));
-    }
+    };
 
-    public void Splash(Player target, Enemy sender)
+    public Attack Splash = (target, sender) =>
     {
         target.TakeDamage((int)(sender.RawDamage * 0.7));
-    }
+    };
 }
