@@ -18,6 +18,7 @@ abstract class Enemy(string name, int health, int rawDamage, int defense)
 
     public abstract void AttackPlayer(Player target);
     public abstract void OnDeath();
+    Attacks attacks = new();
 
     public virtual void TakeDamage(int Amount)
     {
@@ -30,6 +31,18 @@ class Slime(string name, int health, int rawDamage, int defense, int size, Enemy
     public override void AttackPlayer(Player target)
     {
         target.TakeDamage(RawDamage);
+
+        switch (Random.Shared.Next(1, 100))
+        {
+            case <= 33:
+                break;
+
+            case <= 66:
+                break;
+
+            case <= 100:
+                break;
+        }
     }
 
     public override void OnDeath()
@@ -48,5 +61,25 @@ class Slime(string name, int health, int rawDamage, int defense, int size, Enemy
         }
 
         enemySpawner.ActiveEnemies.Remove(this);
+    }
+}
+
+class Attacks()
+{
+    public delegate void Attack(Player target, Enemy sender);
+
+    public void Clash(Player target, Enemy sender)
+    {
+        target.TakeDamage(sender.RawDamage * 3);
+    }
+
+    public void Bounce(Player target, Enemy sender)
+    {
+        target.TakeDamage((int)(sender.RawDamage * 1.5));
+    }
+
+    public void Splash(Player target, Enemy sender)
+    {
+        target.TakeDamage((int)(sender.RawDamage * 0.7));
     }
 }
