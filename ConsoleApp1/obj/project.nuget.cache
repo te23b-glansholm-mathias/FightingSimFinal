@@ -1,10 +1,20 @@
 {
   "version": 2,
-  "dgSpecHash": "SEusCcPhrUs=",
+  "dgSpecHash": "KJXRYStl/yg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
+  "projectFilePath": "c:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mathias.glansholm\\.nuget\\packages\\spectre.console\\0.54.0\\spectre.console.0.54.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "message": "Problem reading the cache file c:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
+      "projectPath": "c:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
+      "warningLevel": 1,
+      "filePath": "c:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
+      "targetGraphs": []
+    }
+  ]
 }

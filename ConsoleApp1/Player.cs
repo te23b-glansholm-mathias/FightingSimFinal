@@ -2,7 +2,7 @@ class Player(string name)
 {
     public string Name { get; } = name;
     public bool IsAlive { get; private set; } = true;
-    public int Defense { get; } = 4;
+    public int Defense { get; } = 0;
     public int MaxHealth { get; } = 100;
     public int RawDamage { get; } = 10;
     public int Gold { get; set; }

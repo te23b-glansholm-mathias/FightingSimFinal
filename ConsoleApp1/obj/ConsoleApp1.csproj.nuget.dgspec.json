@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj": {}
+    "c:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj": {
+    "c:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
+        "projectUniqueName": "c:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
         "projectName": "ConsoleApp1",
-        "projectPath": "C:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
+        "projectPath": "c:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
         "packagesPath": "C:\\Users\\mathias.glansholm\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\obj\\",
+        "outputPath": "c:\\Users\\mathias.glansholm\\Documents\\Prog 2\\FightingSimFinal\\ConsoleApp1\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

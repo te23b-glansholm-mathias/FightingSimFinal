@@ -7,11 +7,11 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
         while (enemySpawner.ActiveEnemies.Count > 0 && game.Player.IsAlive == true)
         {
             PlayerTurn();
-            EnemyTurn();
+            if (enemySpawner.ActiveEnemies.Count > 0) EnemyTurn();
         }
 
         if (game.Player.IsAlive == false) LoseFight();
-        else if (enemySpawner.ActiveEnemies.Count > 0) WinFight();
+        else WinFight();
     }
 
     private void StartFight()
@@ -81,12 +81,12 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
             AnsiConsole.WriteLine($"{enemy.Name} HP: {enemy.Health}");
         }
 
-        foreach (Enemy enemy in enemySpawner.ActiveEnemies)
+        foreach (Enemy enemy in enemySpawner.ActiveEnemies.ToList())
         {
             int PastHealth = game.Player.Health;
 
             enemy.AttackPlayer(game.Player);
-            AnsiConsole.WriteLine($"{enemy.Name} attacks you for {PastHealth - game.Player.Health} damage!");
+            AnsiConsole.MarkupLine(enemy.ActiveAttack.AttackMessage);
         }
 
         Console.ReadKey(true);
@@ -103,20 +103,5 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
     private void LoseFight()
     {
         game.GameOver();
-    }
-}
-
-class EnemySpawner
-{
-    public List<Enemy> ActiveEnemies = [];
-
-    public EnemySpawner(string table)
-    {
-        switch (table)
-        {
-            case "World_1":
-                ActiveEnemies.Add(new Slime("Slime (L)", 10, 4, 0, 3, this));
-                break;
-        }
     }
 }
