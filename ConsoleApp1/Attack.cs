@@ -1,19 +1,11 @@
-enum AttackType
-{
-    raw,
-    summon
-}
-
 abstract class Attack
 {
     public string Name { get; }
-    public AttackType Type { get; }
     public string AttackMessage { get; protected set; }
 
-    protected Attack(string name, AttackType type)
+    protected Attack(string name)
     {
         Name = name;
-        Type = type;
     }
 
     public abstract void DoAction(Player target, Enemy sender);
@@ -21,33 +13,33 @@ abstract class Attack
 
 class Clash : Attack
 {
-    public Clash() : base("Clash", AttackType.raw) { }
+    public Clash() : base("Clash") { }
 
     public override void DoAction(Player target, Enemy sender)
     {
-        AttackMessage = $"{sender.Name} uses [red]Clash[/]";
+        AttackMessage = $"{sender.Name} uses [red]{Name}[/]";
         target.TakeDamage(sender.RawDamage * 3);
     }
 }
 
 class Bounce : Attack
 {
-    public Bounce() : base("Bounce", AttackType.raw) { }
+    public Bounce() : base("Bounce") { }
 
     public override void DoAction(Player target, Enemy sender)
     {
-        AttackMessage = $"{sender.Name} uses [red]Bounce[/]";
+        AttackMessage = $"{sender.Name} uses [red]{Name}[/]";
         target.TakeDamage((int)(sender.RawDamage * 1.5));
     }
 }
 
 class Splash : Attack
 {
-    public Splash() : base("Splash", AttackType.raw) { }
+    public Splash() : base("Splash") { }
 
     public override void DoAction(Player target, Enemy sender)
     {
-        AttackMessage = $"{sender.Name} uses [red]Splash[/]";
+        AttackMessage = $"{sender.Name} uses [red]{Name}[/]";
         target.TakeDamage((int)(sender.RawDamage * 0.7));
     }
 }
@@ -59,7 +51,7 @@ class SummonEnemy : Attack
     private string SummonName;
     private readonly int Amount;
 
-    public SummonEnemy(string preset, EnemySpawner enemySpawner) : base("Summon Slime", AttackType.summon)
+    public SummonEnemy(string preset, EnemySpawner enemySpawner) : base("Summon Slime")
     {
         EnemySpawner = enemySpawner;
 
@@ -68,14 +60,14 @@ class SummonEnemy : Attack
             case "Slime (S)":
                 SummonName = preset;
                 Summon = typeof(Slime);
-                Amount = 5;
+                Amount = 1;
                 break;
         }
     }
 
     public override void DoAction(Player target, Enemy sender)
     {
-        AttackMessage = $"{sender.Name} summons {Amount} {SummonName}";
+        AttackMessage = $"{sender.Name} [yellow]summons[/] {Amount} {SummonName}";
 
         for (int i = 0; i < Amount; i++)
         {

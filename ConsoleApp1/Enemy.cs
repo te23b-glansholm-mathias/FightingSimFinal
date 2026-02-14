@@ -30,7 +30,7 @@ abstract class Enemy(string name)
 
 class Slime : Enemy
 {
-    private int size;
+    private int _size;
     private EnemySpawner _enemySpawner;
 
     public Slime(string name, EnemySpawner enemySpawner) : base(name)
@@ -41,23 +41,23 @@ class Slime : Enemy
         {
             case "Slime (L)":
                 AttacksOwned.AddRange(new Clash(), new SummonEnemy("Slime (S)", enemySpawner));
-                size = 3;
-                Health = 100;
+                _size = 3;
+                Health = 30;
                 RawDamage = 6;
                 break;
 
             case "Slime (M)":
                 AttacksOwned.AddRange(new Bounce(), new Splash());
-                size = 2;
-                Health = 2;
+                _size = 2;
+                Health = 20;
                 RawDamage = 4;
                 break;
 
             case "Slime (S)":
                 AttacksOwned.Add(new Splash());
-                size = 1;
-                Health = 2;
-                RawDamage = 4;
+                _size = 1;
+                Health = 10;
+                RawDamage = 2;
                 break;
         }
     }
@@ -72,7 +72,7 @@ class Slime : Enemy
 
     public override void OnDeath()
     {
-        switch (size)
+        switch (_size)
         {
             case 3:
                 _enemySpawner.ActiveEnemies.Add(new Slime("Slime (M)", _enemySpawner));

@@ -11,7 +11,7 @@ class Menu(Game game) : GameState()
                 break;
 
             case "Inventory":
-                game.ChangeState(new Inventory());
+                game.ChangeState(new Inventory(game));
                 break;
 
             case "Exit":

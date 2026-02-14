@@ -68,7 +68,6 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
         }
 
         string choice = AnsiConsole.Prompt(new SelectionPrompt<string>().Title($"Which enemy?").AddChoices(enemyNames));
-
         return enemySpawner.ActiveEnemies.Find(e => e.Name + $" (HP: {e.Health})" == choice);
     }
 
@@ -83,10 +82,14 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
 
         foreach (Enemy enemy in enemySpawner.ActiveEnemies.ToList())
         {
-            int PastHealth = game.Player.Health;
+            if (game.Player.IsAlive)
+            {
+                int PastHealth = game.Player.Health;
 
-            enemy.AttackPlayer(game.Player);
-            AnsiConsole.MarkupLine(enemy.ActiveAttack.AttackMessage);
+                enemy.AttackPlayer(game.Player);
+                if (PastHealth - game.Player.Health > 0) AnsiConsole.MarkupLine(enemy.ActiveAttack.AttackMessage + $" and dealt {PastHealth - game.Player.Health} damage");
+                else AnsiConsole.MarkupLine(enemy.ActiveAttack.AttackMessage);
+            }
         }
 
         Console.ReadKey(true);

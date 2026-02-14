@@ -6,6 +6,7 @@ class Player(string name)
     public int MaxHealth { get; } = 100;
     public int RawDamage { get; } = 10;
     public int Gold { get; set; }
+    public List<Item> ItemsOwned { get; } = [];
 
     private int _health = 100;
     private float _precision = 0.6f;

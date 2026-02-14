@@ -9,7 +9,7 @@ class Explore(Game game) : GameState()
                 break;
 
             case <= 66:
-                game.Player.Gold += Random.Shared.Next(12, 17);
+                FindGold();
                 game.ChangeState(new Menu(game));
                 break;
 
@@ -20,4 +20,11 @@ class Explore(Game game) : GameState()
     }
 
     private void FindItem() { }
+    private void FindGold()
+    {
+        int foundGold = Random.Shared.Next(12, 17);
+        game.Player.Gold += foundGold;
+        AnsiConsole.MarkupLine($"You found [yellow]{foundGold} gold[/]!");
+        Console.ReadKey(true);
+    }
 }
