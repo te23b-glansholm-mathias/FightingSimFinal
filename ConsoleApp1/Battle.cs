@@ -41,12 +41,12 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
                 break;
 
             case "Use Item":
+                game.ChangeState(new Inventory(game));
                 break;
 
             case "Flee":
                 break;
         }
-
     }
 
     private void AttackEnemy()

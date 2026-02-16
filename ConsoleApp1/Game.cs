@@ -5,6 +5,7 @@ Game game = new();
 class Game
 {
     private GameState _currentState;
+    private GameState _lastState;
     public Player Player { get; } = new(AnsiConsole.Ask<string>("What's your name?"));
     public List<Enemy> ActiveEnemies = [];
 
@@ -18,7 +19,13 @@ class Game
     public void ChangeState(GameState state)
     {
         AnsiConsole.Clear();
+        _lastState = _currentState;
         _currentState = state;
+    }
+
+    public void GoBack()
+    {
+        ChangeState(_lastState);
     }
 
     public void GameOver()

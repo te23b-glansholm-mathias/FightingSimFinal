@@ -1,6 +1,6 @@
-class Player(string name)
+class Player
 {
-    public string Name { get; } = name;
+    public string Name { get; }
     public bool IsAlive { get; private set; } = true;
     public int Defense { get; } = 0;
     public int MaxHealth { get; } = 100;
@@ -21,9 +21,22 @@ class Player(string name)
         }
     }
 
+    public Player(string name)
+    {
+        Name = name;
+        ItemsOwned.Add(new HealthPotion("Normal Health Potion", this));
+        ItemsOwned.Add(new HealthPotion("Normal Health Potion", this));
+        ItemsOwned.Add(new HealthPotion("Health Potion (?)", this));
+    }
+
     public void TakeDamage(int amount)
     {
         Health -= (int)(amount * (100.0 / (100 + Defense)));
+    }
+
+    public void Heal(int amount)
+    {
+        Health += amount;
     }
 
     public void AttackEnemy(Enemy target)

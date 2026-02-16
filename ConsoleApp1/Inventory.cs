@@ -1,85 +1,63 @@
-using System.Reflection.Metadata.Ecma335;
-
 class Inventory(Game game) : GameState()
 {
     public override void Update()
     {
-        game.Player.ItemsOwned.Add(new Consumable("Minor Health Potion"));
-        game.Player.ItemsOwned.Add(new Consumable("Minor Health Potion"));
-        game.Player.ItemsOwned.Add(new Consumable("Minor Health Potion"));
-
         List<string> ItemNames = [];
         foreach (Item i in game.Player.ItemsOwned)
         {
             ItemNames.Add(i.Name);
         }
 
-        string choice = AnsiConsole.Prompt(new SelectionPrompt<string>().Title("Inventory").AddChoices(ItemNames));
-        game.Player.ItemsOwned.Find(i => i.Name == choice).Use();
-    }
-}
-
-public abstract class Item(string name)
-{
-    public string Name { get; } = name;
-
-    public abstract void Use();
-}
-
-public class Consumable : Item
-{
-    public Consumable(string Name) : base(Name)
-    {
-
-    }
-
-    public override void Use()
-    {
-        switch (Name)
+        string choice = AnsiConsole.Prompt(new SelectionPrompt<string>().Title("Inventory").AddChoices(ItemNames.Append("back")));
+        if (choice == "back") game.GoBack();
+        else
         {
-            case "Minor Health Potion":
-                AnsiConsole.MarkupLine("[green]You used a minor health potion and healed 16 HP [/]");
-                Console.ReadKey(true);
-                break;
+            Item choosenItem = game.Player.ItemsOwned.Find(i => i.Name == choice);
+            choosenItem.Use();
+            game.Player.ItemsOwned.Remove(choosenItem);
+            AnsiConsole.MarkupLine(choosenItem.UseMessage);
         }
     }
 }
 
-public class Charm : Item
+abstract class Item(string name, Player player)
 {
-    public Charm(string Name) : base(Name)
-    {
+    protected Player Player = player;
+    public string Name { get; } = name;
+    protected int Value;
 
-    }
+    public string UseMessage { get; protected set; }
 
-    public override void Use()
-    {
-        throw new NotImplementedException();
-    }
+    public abstract void Use();
 }
 
-public class Weapon : Item
+class HealthPotion : Item
 {
-    public Weapon(string Name) : base(Name)
+    public HealthPotion(string Name, Player player) : base(Name, player)
     {
+        switch (Name)
+        {
+            case "Minor Health Potion":
+                Value = 30;
+                break;
 
+            case "Normal Health Potion":
+                Value = 50;
+                break;
+
+            case "Large Health Potion":
+                Value = 120;
+                break;
+
+            case "Health Potion (?)":
+                Value = Random.Shared.Next(50);
+                break;
+        }
     }
 
     public override void Use()
     {
-        throw new NotImplementedException();
-    }
-}
-
-public class Armor : Item
-{
-    public Armor(string Name) : base(Name)
-    {
-
-    }
-
-    public override void Use()
-    {
-        throw new NotImplementedException();
+        Player.Heal(Value);
+        UseMessage = $"You used a {Name} and healed [Chartreuse2]{Value}[/] HP";
     }
 }
