@@ -1,31 +1,38 @@
 ﻿global using Spectre.Console;
+using System.Diagnostics;
 
 Game game = new();
 
 class Game
 {
-    private GameState _currentState;
-    private GameState _lastState;
+    private Stack<GameState> _states = [];
     public Player Player { get; } = new(AnsiConsole.Ask<string>("What's your name?"));
     public List<Enemy> ActiveEnemies = [];
 
     public Game()
     {
-        ChangeState(new Menu(this));
+        PushState(new Menu(this));
 
-        while (true) _currentState.Update();
+        while (true)
+        {
+            _states.Peek().Update();
+            Debug.WriteLine($"Layers: {_states.Count}");
+        }
     }
 
-    public void ChangeState(GameState state)
+    public void PushState(GameState newState)
     {
         AnsiConsole.Clear();
-        _lastState = _currentState;
-        _currentState = state;
+        _states.Push(newState);
     }
 
-    public void GoBack()
+    public void GoBack(int amount = 1)
     {
-        ChangeState(_lastState);
+        AnsiConsole.Clear();
+        for (int i = 0; i < amount && _states.Count > 1; i++)
+        {
+            _states.Pop();
+        }
     }
 
     public void GameOver()

@@ -5,21 +5,28 @@ class Explore(Game game) : GameState()
         switch (Random.Shared.Next(1, 101))
         {
             case <= 33:
-                FindItem();
+                FindItem(new ItemPool("World_1", game.Player));
+                game.GoBack();
                 break;
 
             case <= 66:
                 FindGold();
-                game.ChangeState(new Menu(game));
+                game.GoBack();
                 break;
 
             case <= 100:
-                game.ChangeState(new Battle(game, new EnemySpawner("World_1")));
+                game.PushState(new Battle(game, new EnemySpawner("World_1")));
                 break;
         }
     }
 
-    private void FindItem() { }
+    private void FindItem(ItemPool itemPool)
+    {
+        itemPool.AddItem();
+        AnsiConsole.MarkupLine($"You found a {itemPool.ItemAdded}!");
+        Console.ReadKey(true);
+    }
+
     private void FindGold()
     {
         int foundGold = Random.Shared.Next(12, 17);

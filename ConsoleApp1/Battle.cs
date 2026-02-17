@@ -1,17 +1,29 @@
 class Battle(Game game, EnemySpawner enemySpawner) : GameState()
 {
+    private bool _fightStarted = false;
+
     public override void Update()
     {
-        StartFight();
-
-        while (enemySpawner.ActiveEnemies.Count > 0 && game.Player.IsAlive == true)
+        if (!_fightStarted)
         {
-            PlayerTurn();
-            if (enemySpawner.ActiveEnemies.Count > 0) EnemyTurn();
+            StartFight();
+            _fightStarted = true;
+            return;
         }
 
-        if (game.Player.IsAlive == false) LoseFight();
-        else WinFight();
+        if (!game.Player.IsAlive)
+        {
+            LoseFight();
+            return;
+        }
+
+        if (enemySpawner.ActiveEnemies.Count == 0)
+        {
+            WinFight();
+            return;
+        }
+
+        PlayerTurn();
     }
 
     private void StartFight()
@@ -38,13 +50,15 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
         {
             case "Attack":
                 AttackEnemy();
+                if (enemySpawner.ActiveEnemies.Count > 0) EnemyTurn();
                 break;
 
             case "Use Item":
-                game.ChangeState(new Inventory(game));
+                game.PushState(new Inventory(game));
                 break;
 
             case "Flee":
+                game.GoBack(2);
                 break;
         }
     }
@@ -100,7 +114,7 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
         AnsiConsole.Clear();
         AnsiConsole.WriteLine("You defeated all of the enemies!");
         Console.ReadKey(true);
-        game.ChangeState(new Menu(game));
+        game.GoBack(2);
     }
 
     private void LoseFight()

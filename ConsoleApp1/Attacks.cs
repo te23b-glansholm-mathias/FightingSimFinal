@@ -18,7 +18,7 @@ class Clash : Attack
     public override void DoAction(Player target, Enemy sender)
     {
         AttackMessage = $"{sender.Name} uses [red]{Name}[/]";
-        target.TakeDamage(sender.RawDamage * 3);
+        target.TakeDamage((int)(sender.RawDamage * 3 * (0.4 * (sender.Level - 1) + 1)));
     }
 }
 
@@ -29,7 +29,7 @@ class Bounce : Attack
     public override void DoAction(Player target, Enemy sender)
     {
         AttackMessage = $"{sender.Name} uses [red]{Name}[/]";
-        target.TakeDamage((int)(sender.RawDamage * 1.5));
+        target.TakeDamage((int)(sender.RawDamage * 1.5 * (0.4 * (sender.Level - 1) + 1)));
     }
 }
 
@@ -40,7 +40,7 @@ class Splash : Attack
     public override void DoAction(Player target, Enemy sender)
     {
         AttackMessage = $"{sender.Name} uses [red]{Name}[/]";
-        target.TakeDamage((int)(sender.RawDamage * 0.7));
+        target.TakeDamage((int)(sender.RawDamage * 0.7 * (0.4 * (sender.Level - 1) + 1)));
     }
 }
 
@@ -51,8 +51,9 @@ class SummonEnemy : Attack
     private string SummonName;
     private readonly int Amount;
 
-    public SummonEnemy(string preset, EnemySpawner enemySpawner) : base("Summon Slime")
+    public SummonEnemy(string preset, EnemySpawner enemySpawner, int amount = 1) : base("Summon Slime")
     {
+        Amount = amount;
         EnemySpawner = enemySpawner;
 
         switch (preset)
@@ -60,7 +61,6 @@ class SummonEnemy : Attack
             case "Slime (S)":
                 SummonName = preset;
                 Summon = typeof(Slime);
-                Amount = 1;
                 break;
         }
     }
@@ -71,7 +71,7 @@ class SummonEnemy : Attack
 
         for (int i = 0; i < Amount; i++)
         {
-            Enemy e = (Enemy)Activator.CreateInstance(Summon, [SummonName, EnemySpawner]);
+            Enemy e = (Enemy)Activator.CreateInstance(Summon, [SummonName, sender.Level, EnemySpawner]);
             EnemySpawner.ActiveEnemies.Add(e);
         }
     }
