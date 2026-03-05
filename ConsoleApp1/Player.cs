@@ -1,6 +1,3 @@
-using System.Diagnostics;
-
-[DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 class Player
 {
     public string Name { get; }
@@ -11,8 +8,8 @@ class Player
     public int RawDamage { get; } = 10;
     public int Gold { get; set; }
     public List<Item> ItemsOwned { get; } = [];
-    public List<Charm> EquipedCharms { get; } = [];
-    public int CharmMaxLoad { get; } = 1;
+    public List<Charm> EquippedCharms { get; } = [];
+    public int CharmMaxLoad { get; } = 2;
 
     private int _baseMaxHealth = 100;
     private float _maxHealthMultiplier = 1;
@@ -36,7 +33,10 @@ class Player
 
         ItemsOwned.Add(new HealthPotion("Normal Health Potion", this));
         ItemsOwned.Add(new HealthPotion("Normal Health Potion", this));
+        ItemsOwned.Add(new HealthPotion("Normal Health Potion", this));
+        ItemsOwned.Add(new HealthPotion("Normal Health Potion", this));
         ItemsOwned.Add(new HealthPotion("Health Potion (?)", this));
+        ItemsOwned.Add(new HealthCharm("Health Charm", this));
         ItemsOwned.Add(new HealthCharm("Health Charm", this));
         ItemsOwned.Add(new HealthCharm("Health Charm", this));
     }
@@ -53,12 +53,20 @@ class Player
 
     public bool TryEquipCharm(Charm charm)
     {
-        if (EquipedCharms.Count < CharmMaxLoad)
+        if (EquippedCharms.Count < CharmMaxLoad)
         {
-            EquipedCharms.Add(charm);
+            ItemsOwned.Remove(charm);
+            EquippedCharms.Add(charm);
             return true;
         }
         else return false;
+    }
+
+    public void UnequipCharm(Charm charm)
+    {
+        charm.Remove();
+        EquippedCharms.Remove(charm);
+        ItemsOwned.Add(charm);
     }
 
     public void AttackEnemy(Enemy target)

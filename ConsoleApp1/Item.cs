@@ -1,5 +1,3 @@
-using System.Collections;
-
 abstract class Item(string name, Player player)
 {
     protected Player Player = player;
@@ -39,7 +37,8 @@ class HealthPotion : Item
     public override bool Use()
     {
         Player.Heal(Value);
-        UseMessage = $"You used a {Name} and healed [Chartreuse2]{Value}[/] HP";
+        if (Value >= 0) UseMessage = $"You used a {Name} and healed [Chartreuse2]{Value}[/] HP";
+        else UseMessage = $"You used a {Name} and Lost [Red]{Value}[/] HP";
         return true;
     }
 }

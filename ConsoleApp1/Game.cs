@@ -1,11 +1,11 @@
 ﻿global using Spectre.Console;
 using System.Diagnostics;
 
-Game game = new();
+Game session = new();
 
 class Game
 {
-    private Stack<GameState> _states = [];
+    readonly Stack<GameState> _states = [];
     public Player Player { get; } = new(AnsiConsole.Ask<string>("What's your name?"));
     public List<Enemy> ActiveEnemies = [];
 
