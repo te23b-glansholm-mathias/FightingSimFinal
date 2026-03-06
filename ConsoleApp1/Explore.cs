@@ -30,7 +30,7 @@ class Explore(Game game) : GameState()
     private void FindGold()
     {
         int foundGold = Random.Shared.Next(12, 17);
-        game.Player.Gold += foundGold;
+        game.Player.AddGold(foundGold);
         AnsiConsole.MarkupLine($"You found [yellow]{foundGold} gold[/]!");
         Console.ReadKey(true);
     }

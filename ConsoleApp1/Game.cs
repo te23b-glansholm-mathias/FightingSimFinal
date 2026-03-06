@@ -16,7 +16,8 @@ class Game
         while (true)
         {
             _states.Peek().Update();
-            Debug.WriteLine($"Layers: {_states.Count}");
+            Debug.WriteLine(Player.Defense);
+            // Debug.WriteLine($"Layers: {_states.Count}");
         }
     }
 

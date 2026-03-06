@@ -2,7 +2,6 @@ abstract class Item(string name, Player player)
 {
     protected Player Player = player;
     public string Name { get; } = name;
-    protected int Value;
 
     public string UseMessage { get; protected set; }
 
@@ -11,6 +10,8 @@ abstract class Item(string name, Player player)
 
 class HealthPotion : Item
 {
+    protected int Value;
+
     public HealthPotion(string Name, Player player) : base(Name, player)
     {
         switch (Name)
@@ -28,14 +29,32 @@ class HealthPotion : Item
                 break;
 
             case "Health Potion (?)":
-                Value = Random.Shared.Next(50);
+                switch (Random.Shared.Next(3))
+                {
+                    case 0:
+                        Value = -100;
+                        break;
+
+                    case 1:
+                        Value = -50;
+                        break;
+
+                    case 2:
+                        Value = 50;
+                        break;
+
+                    case 3:
+                        Value = 100;
+                        break;
+                }
                 break;
         }
-
     }
 
     public override bool Use()
     {
+        if (Value > 0) Value = (int)(Value * Player.HealthPotioneffect);
+
         Player.Heal(Value);
         if (Value >= 0) UseMessage = $"You used a {Name} and healed [Chartreuse2]{Value}[/] HP";
         else UseMessage = $"You used a {Name} and Lost [Red]{Value}[/] HP";
@@ -43,32 +62,10 @@ class HealthPotion : Item
     }
 }
 
-abstract class Charm(string name, Player player) : Item(name, player)
+interface IEquipable
 {
-    public abstract void Remove();
-}
-
-class HealthCharm(string name, Player player) : Charm(name, player)
-{
-    float HealthPotionBuff = 25;
-    float MaxHealthBuff = 0.15f;
-
-    public override bool Use()
-    {
-        if (Player.TryEquipCharm(this))
-        {
-            Player.AddMaxHealthMultiplier(MaxHealthBuff);
-            UseMessage = $"Increased your max HP with {MaxHealthBuff}%";
-            return true;
-        }
-        else UseMessage = "No";
-        return false;
-    }
-
-    public override void Remove()
-    {
-        Player.AddMaxHealthMultiplier(-MaxHealthBuff);
-    }
+    void AddEffect();
+    void RemoveEffect();
 }
 
 class ItemPool(string table, Player player)
