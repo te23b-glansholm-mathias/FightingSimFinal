@@ -1,5 +1,4 @@
 ﻿global using Spectre.Console;
-using System.Diagnostics;
 
 Game session = new();
 
@@ -16,7 +15,6 @@ class Game
         while (true)
         {
             _states.Peek().Update();
-            Debug.WriteLine(Player.Defense);
             // Debug.WriteLine($"Layers: {_states.Count}");
         }
     }
