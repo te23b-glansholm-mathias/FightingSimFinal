@@ -41,6 +41,6 @@ class RawSword : Weapon
 
     public override void RemoveEffect()
     {
-        Player.AddRawDamage(-RawDamage);
+        Player.RemoveRawDamage(RawDamage);
     }
 }

@@ -4,7 +4,7 @@ class Inventory(Game game) : GameState()
 {
     public override void Update()
     {
-        List<string> ItemNames = [.. game.Player.ItemsOwned.Select(i => i.Name)];
+        List<string> ItemNames = [.. game.Player.ItemsOwned.OrderBy(i => i.GetType().Name).ThenBy(i => i.Name).Select(i => i.Name)];
 
         List<string> AppendList = [];
         if (game.Player.EquippedCharms.Count > 0) AppendList.Add("[yellow]Unequip Charm[/]");
@@ -115,7 +115,7 @@ class Inventory(Game game) : GameState()
                 game.Player.UnequipCharm(ChosenCharm);
 
                 AnsiConsole.Clear();
-                AnsiConsole.MarkupLine($"You unequipped {ChosenCharm}");
+                AnsiConsole.MarkupLine($"You unequipped {ChosenCharm.Name}");
             }
         }
 
@@ -134,7 +134,7 @@ class Inventory(Game game) : GameState()
                 game.Player.UnequipWeapon(ChosenWeapon);
 
                 AnsiConsole.Clear();
-                AnsiConsole.MarkupLine($"You unequipped {ChosenWeapon}");
+                AnsiConsole.MarkupLine($"You unequipped {ChosenWeapon.Name}");
             }
         }
 
@@ -153,7 +153,7 @@ class Inventory(Game game) : GameState()
                 game.Player.UnequipArmor(ChosenArmor);
 
                 AnsiConsole.Clear();
-                AnsiConsole.MarkupLine($"You unequipped {ChosenArmor}");
+                AnsiConsole.MarkupLine($"You unequipped {ChosenArmor.Name}");
             }
         }
     }

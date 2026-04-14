@@ -23,6 +23,10 @@ class RawArmor : Armor
     {
         switch (Name)
         {
+            case "Wood Armor":
+                DefenseIncrease = 2;
+                break;
+
             case "Bronze Armor":
                 DefenseIncrease = 8;
                 break;
@@ -37,6 +41,6 @@ class RawArmor : Armor
 
     public override void RemoveEffect()
     {
-        Player.AddDefense(-DefenseIncrease);
+        Player.RemoveDefense(DefenseIncrease);
     }
 }

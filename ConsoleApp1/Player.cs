@@ -1,4 +1,6 @@
-class Player
+using System.Data;
+
+class Player : IDamageable
 {
     public string Name { get; }
     public int Level { get; }
@@ -7,7 +9,6 @@ class Player
     public int MaxHealth => (int)(_baseMaxHealth * _maxHealthMultipliers.Aggregate(1f, (acc, m) => acc * m));
     public int RawDamage => (int)(_RawDamage * _RawDamageMultipliers.Aggregate(1f, (acc, m) => acc * m));
     public float HealthPotioneffect => _baseHealthPotionEffect * _healthPotionEffectMultiplier.Aggregate(1f, (acc, m) => acc * m);
-    public int Gold { get; private set; }
     public List<Item> ItemsOwned { get; } = [];
     public List<Charm> EquippedCharms { get; } = [];
     public List<Weapon> EquippedWeapon { get; private set; } = [];
@@ -23,6 +24,7 @@ class Player
     private List<float> _RawDamageMultipliers = [1];
     private List<float> _healthPotionEffectMultiplier = [1];
     private int _health;
+    private int _gold;
     private float _precision = 0.6f;
 
     public event Action OnHealthUpdate;
@@ -38,18 +40,27 @@ class Player
         }
     }
 
+    public int Gold
+    {
+        get => _gold;
+        private set => _gold = Math.Max(value, 0);
+    }
+
     public Player(string name)
     {
         Name = name;
         _health = MaxHealth;
 
         RawSword stick = new("Stick", this);
+        RawArmor woodArmor = new("Wood Armor", this);
         stick.Use();
+        woodArmor.Use();
 
         ItemsOwned.Add(new HealthPotion("Normal Health Potion", this));
-        ItemsOwned.Add(new RawArmor("Bronze Armor", this));
-        ItemsOwned.Add(new RawArmor("Bronze Armor", this));
-        ItemsOwned.Add(new RawArmor("Bronze Armor", this));
+        ItemsOwned.Add(new HealthPotion("Normal Health Potion", this));
+        ItemsOwned.Add(new HealthPotion("Normal Health Potion", this));
+        ItemsOwned.Add(new HealthPotion("Normal Health Potion", this));
+        ItemsOwned.Add(new RawArmor("Wood Armor", this));
     }
 
     public void TakeDamage(int amount)
@@ -61,6 +72,9 @@ class Player
     {
         Health += amount;
     }
+
+    public void AddGold(int amount) => Gold += amount;
+    public void RemoveGold(int amount) => Gold -= amount;
 
     public bool TryEquipCharm(Charm charm)
     {
@@ -116,25 +130,20 @@ class Player
         ItemsOwned.Add(armor);
     }
 
-    public void AttackEnemy(Enemy target)
+    public void Attack(IDamageable target)
     {
         int flatDamage = Random.Shared.Next((int)(RawDamage * _precision), RawDamage);
         target.TakeDamage((int)(flatDamage * (0.1 * (Level - 1) + 1)));
     }
 
-    public void AddGold(int amount)
-    {
-        Gold += amount;
-    }
-
-    public void AddRawDamage(int amount)
-    {
-        _RawDamage += amount;
-    }
-    public void AddDefense(int amount)
-    {
-        Defense += amount;
-    }
+    public void AddRawDamage(int amount) => _RawDamage += amount;
+    public void RemoveRawDamage(int amount) => _RawDamage += amount;
+    public void AddRawDamageMultiplier(float multiplier) => _RawDamageMultipliers.Add(1 + multiplier);
+    public void RemoveRawDamageMultiplier(float multiplier) => _RawDamageMultipliers.Remove(1 + multiplier);
+    public void AddDefense(int amount) => Defense += amount;
+    public void RemoveDefense(int amount) => Defense -= amount;
+    public void AddHealthPotionMultiplier(float multiplier) => _healthPotionEffectMultiplier.Add(1 + multiplier);
+    public void RemoveHealthPotionMultiplier(float multiplier) => _healthPotionEffectMultiplier.Remove(1 + multiplier);
 
     public void AddMaxHealthMultiplier(float multiplier)
     {
@@ -146,25 +155,5 @@ class Player
     {
         _maxHealthMultipliers.Remove(1 + multiplier);
         Health = Health;
-    }
-
-    public void AddHealthPotionMultiplier(float multiplier)
-    {
-        _healthPotionEffectMultiplier.Add(1 + multiplier);
-    }
-
-    public void RemoveHealthPotionMultiplier(float multiplier)
-    {
-        _healthPotionEffectMultiplier.Remove(1 + multiplier);
-    }
-
-    public void AddRawDamageMultiplier(float multiplier)
-    {
-        _RawDamageMultipliers.Add(1 + multiplier);
-    }
-
-    public void RemoveRawDamageMultiplier(float multiplier)
-    {
-        _RawDamageMultipliers.Remove(1 + multiplier);
     }
 }

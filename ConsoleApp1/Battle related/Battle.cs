@@ -44,7 +44,7 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
             AnsiConsole.WriteLine($"{enemy.Name} HP: {enemy.Health}");
         }
 
-        string choice = AnsiConsole.Prompt(new SelectionPrompt<string>().Title($"What do you want to do? (HP: {game.Player.Health})").AddChoices("Attack", "Use Item", "Flee"));
+        string choice = AnsiConsole.Prompt(new SelectionPrompt<string>().Title($"What do you want to do? (HP: {game.Player.Health} - Gold: {game.Player.Gold})").AddChoices("Attack", "Use Item", "Flee"));
 
         switch (choice)
         {
@@ -68,7 +68,7 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
         Enemy enemy = ChooseEnemy();
         int PastHealth = enemy.Health;
 
-        game.Player.AttackEnemy(enemy);
+        game.Player.Attack(enemy);
         AnsiConsole.WriteLine($"You dealt {PastHealth - enemy.Health} to {enemy.Name}!");
         Console.ReadKey(true);
     }
@@ -98,11 +98,20 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
         {
             if (game.Player.IsAlive)
             {
-                int PastHealth = game.Player.Health;
+                int pastHealth = game.Player.Health;
 
-                enemy.AttackPlayer(game.Player);
-                if (PastHealth - game.Player.Health > 0) AnsiConsole.MarkupLine(enemy.ActiveAttack.AttackMessage + $" and dealt {PastHealth - game.Player.Health} damage");
-                else AnsiConsole.MarkupLine(enemy.ActiveAttack.AttackMessage);
+                enemy.ActiveAttacks.Clear();
+                enemy.DoAction(game.Player);
+
+                foreach (Attack attack in enemy.ActiveAttacks)
+                {
+                    int damage = pastHealth - game.Player.Health;
+
+                    if (damage > 0) AnsiConsole.MarkupLine($"{attack.AttackMessage} and dealt {damage} damage");
+                    else AnsiConsole.MarkupLine(attack.AttackMessage);
+
+                    pastHealth = game.Player.Health;
+                }
             }
         }
 
