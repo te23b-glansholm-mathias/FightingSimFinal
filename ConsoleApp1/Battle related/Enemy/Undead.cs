@@ -40,8 +40,9 @@ class Skeleton : Enemy, IUndead
         {
             if (_boneSmashBuffTurnsRemaining > 0)
             {
-
+                RawDamage = _buffedRawDamage;
             }
+            else RawDamage = _originalRawDamage;
 
             base.DoAction(target);
             if (_boneSmashBuffTurnsRemaining > 0) _boneSmashBuffTurnsRemaining--;

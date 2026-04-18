@@ -1,20 +1,20 @@
-class Explore(Game game) : GameState()
+class Explore(Game game) : GameState() //explorer state
 {
     public override void Update()
     {
         switch (Random.Shared.Next(1, 101))
         {
-            case <= 33:
+            case <= 33: //find a item
                 FindItem(new ItemPool("World_1", game.Player));
                 game.GoBack();
                 break;
 
-            case <= 66:
+            case <= 66: //find gold
                 FindGold();
                 game.GoBack();
                 break;
 
-            case <= 100:
+            case <= 100: //enter a battle
                 game.PushState(new Battle(game, new EnemySpawner("World_1")));
                 break;
         }
@@ -29,7 +29,7 @@ class Explore(Game game) : GameState()
 
     private void FindGold()
     {
-        int foundGold = Random.Shared.Next(12, 17);
+        int foundGold = Random.Shared.Next(12, 17); //gold found is random
         game.Player.AddGold(foundGold);
         AnsiConsole.MarkupLine($"You found [yellow]{foundGold} gold[/]!");
         Console.ReadKey(true);
