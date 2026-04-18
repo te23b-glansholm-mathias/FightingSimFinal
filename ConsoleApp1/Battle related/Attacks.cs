@@ -170,3 +170,18 @@ class BoneSmash(Skeleton skeleton) : Attack("Bone Smash")
         AttackMessage = $"{sender.Name} uses [red]{Name}[/] and buffs themselves!";
     }
 }
+
+class GreedyStrike(GoblinKing goblinKing) : Attack("Greedy Strike")
+{
+    private GoblinKing _goblinKing = goblinKing;
+
+    public override void DoAction(Player target, Enemy sender)
+    {
+        int baseDamage = (int)(sender.RawDamage * 1.5 * (0.4 * (sender.Level - 1) + 1));
+        int goldBonus = _goblinKing.Gold / 10;
+        int totalDamage = baseDamage + goldBonus + _goblinKing.GreedBonus;
+
+        AttackMessage = $"{sender.Name} uses [red]{Name}[/]";
+        target.TakeDamage(totalDamage);
+    }
+}
