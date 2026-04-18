@@ -1,20 +1,20 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "wd42eVzD3nQ=",
+  "dgSpecHash": "YeU12ud488M=",
   "success": true,
-  "projectFilePath": "C:\\Users\\mathias.glansholm\\Documents\\GitHub\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
-=======
-  "dgSpecHash": "sT4pOqTVESg=",
-  "success": true,
-  "projectFilePath": "c:\\Users\\voidl\\OneDrive\\Documents\\All My Files\\C# Projects\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
->>>>>>> d25ab2b008e5baed82d85789508f857481e02cd6
+  "projectFilePath": "c:\\Users\\mathias.glansholm\\Documents\\GitHub\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\voidl\\.nuget\\packages\\spectre.console\\0.54.0\\spectre.console.0.54.0.nupkg.sha512",
-    "C:\\Users\\voidl\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.13\\microsoft.netcore.app.ref.9.0.13.nupkg.sha512",
-    "C:\\Users\\voidl\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\9.0.13\\microsoft.windowsdesktop.app.ref.9.0.13.nupkg.sha512",
-    "C:\\Users\\voidl\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\9.0.13\\microsoft.aspnetcore.app.ref.9.0.13.nupkg.sha512",
-    "C:\\Users\\voidl\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\9.0.13\\microsoft.netcore.app.host.win-x64.9.0.13.nupkg.sha512"
+    "C:\\Users\\mathias.glansholm\\.nuget\\packages\\spectre.console\\0.54.0\\spectre.console.0.54.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "message": "Problem reading the cache file c:\\Users\\mathias.glansholm\\Documents\\GitHub\\FightingSimFinal\\ConsoleApp1\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
+      "projectPath": "c:\\Users\\mathias.glansholm\\Documents\\GitHub\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
+      "warningLevel": 1,
+      "filePath": "c:\\Users\\mathias.glansholm\\Documents\\GitHub\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
+      "targetGraphs": []
+    }
+  ]
 }
