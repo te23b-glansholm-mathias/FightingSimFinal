@@ -1,11 +1,10 @@
-using System.Numerics;
-
-class Inventory(Game game) : GameState()
+class Inventory(Game game) : GameState() //the inventory state
 {
     public override void Update()
     {
-        List<string> ItemNames = [.. game.Player.ItemsOwned.OrderBy(i => i.GetType().Name).ThenBy(i => i.Name).Select(i => i.Name)];
+        List<string> ItemNames = [.. game.Player.ItemsOwned.OrderBy(i => i.GetType().Name).ThenBy(i => i.Name).Select(i => i.Name)]; //sort by type then name
 
+        //add last options to the list
         List<string> AppendList = [];
         if (game.Player.EquippedCharms.Count > 0) AppendList.Add("[yellow]Unequip Charm[/]");
         if (game.Player.EquippedWeapon.Count > 0) AppendList.Add("[yellow]Unequip Weapon[/]");
@@ -13,148 +12,44 @@ class Inventory(Game game) : GameState()
         AppendList.Add("[grey]Back[/]");
 
         string choice = AnsiConsole.Prompt(new SelectionPrompt<string>().Title("Inventory").AddChoices(ItemNames).AddChoices(AppendList));
-        if (choice == "[yellow]Unequip Charm[/]") UnequipItem(typeof(Charm));
-        else if (choice == "[yellow]Unequip Weapon[/]") UnequipItem(typeof(Weapon));
-        else if (choice == "[yellow]Unequip Armor[/]") UnequipItem(typeof(Armor));
-        else if (choice == "[grey]Back[/]") game.GoBack();
-        else
+        switch (choice)
         {
-            Item ChosenItem = game.Player.ItemsOwned.Find(i => i.Name == choice);
-            if (ChosenItem.Use())
-            {
+            case "[yellow]Unequip Charm[/]":
+                HandleUnequip(game.Player.EquippedCharms, game.Player.UnequipCharm);
+                break;
+
+            case "[yellow]Unequip Weapon[/]":
+                HandleUnequip(game.Player.EquippedWeapon, game.Player.UnequipWeapon);
+                break;
+
+            case "[yellow]Unequip Armor[/]":
+                HandleUnequip(game.Player.EquippedArmor, game.Player.UnequipArmor);
+                break;
+
+            case "[grey]Back[/]":
+                game.GoBack();
+                break;
+
+            default:
+                Item ChosenItem = game.Player.ItemsOwned.Find(i => i.Name == choice);
+                ChosenItem.Use();
+
                 game.Player.ItemsOwned.Remove(ChosenItem);
                 AnsiConsole.MarkupLine(ChosenItem.UseMessage + "\n");
-            }
-            else SwitchItem(ChosenItem);
+                break;
         }
     }
 
-    private void SwitchItem(Item item)
+    private void HandleUnequip<T>(List<T> equippedItems, Action<T> unequipAction) where T : Item, IEquipable
     {
         AnsiConsole.Clear();
-        List<string> EquippedItemNames = [];
+        List<string> EquippedItemNames = equippedItems.Select(i => i.Name).ToList();
+        string choice = AnsiConsole.Prompt(new SelectionPrompt<string>().Title($"Choose a {typeof(T).Name} to unequip").AddChoices(EquippedItemNames.Append("[grey]Back[/]")));
 
-        if (item is Charm)
-        {
-            foreach (Item i in game.Player.EquippedCharms)
-            {
-                EquippedItemNames.Add(i.Name);
-            }
+        T selected = equippedItems.Find(i => i.Name == choice);
 
-            string choice = AnsiConsole.Prompt(new SelectionPrompt<string>().Title($"Switch {item.Name}?").AddChoices(EquippedItemNames.Append("back")));
-
-            Charm ChosenCharm = game.Player.EquippedCharms.Find(i => i.Name == choice);
-            if (ChosenCharm != null)
-            {
-                game.Player.UnequipCharm(ChosenCharm);
-                item.Use();
-
-                AnsiConsole.Clear();
-                AnsiConsole.MarkupLine(item.UseMessage);
-            }
-        }
-
-        if (item is Weapon)
-        {
-            foreach (Item i in game.Player.EquippedWeapon)
-            {
-                EquippedItemNames.Add(i.Name);
-            }
-
-            string choice = AnsiConsole.Prompt(new SelectionPrompt<string>().Title($"Switch {item.Name}?").AddChoices(EquippedItemNames.Append("back")));
-
-            Weapon ChosenWeapon = game.Player.EquippedWeapon.Find(i => i.Name == choice);
-            if (ChosenWeapon != null)
-            {
-                game.Player.UnequipWeapon(ChosenWeapon);
-                item.Use();
-
-                AnsiConsole.Clear();
-                AnsiConsole.MarkupLine(item.UseMessage);
-            }
-        }
-
-        if (item is Armor)
-        {
-            foreach (Item i in game.Player.EquippedArmor)
-            {
-                EquippedItemNames.Add(i.Name);
-            }
-
-            string choice = AnsiConsole.Prompt(new SelectionPrompt<string>().Title($"Switch {item.Name}?").AddChoices(EquippedItemNames.Append("back")));
-
-            Armor ChosenArmor = game.Player.EquippedArmor.Find(i => i.Name == choice);
-            if (ChosenArmor != null)
-            {
-                game.Player.UnequipArmor(ChosenArmor);
-                item.Use();
-
-                AnsiConsole.Clear();
-                AnsiConsole.MarkupLine(item.UseMessage);
-            }
-        }
-    }
-
-    private void UnequipItem(Type type)
-    {
+        unequipAction(selected);
         AnsiConsole.Clear();
-        List<string> EquippedItemNames = [];
-
-        if (type == typeof(Charm))
-        {
-            foreach (Item i in game.Player.EquippedCharms)
-            {
-                EquippedItemNames.Add(i.Name);
-            }
-
-            string choice = AnsiConsole.Prompt(new SelectionPrompt<string>().Title($"Choose a {type.Name} to unequip").AddChoices(EquippedItemNames.Append("back")));
-
-            Charm ChosenCharm = game.Player.EquippedCharms.Find(i => i.Name == choice);
-            if (ChosenCharm != null)
-            {
-                game.Player.UnequipCharm(ChosenCharm);
-
-                AnsiConsole.Clear();
-                AnsiConsole.MarkupLine($"You unequipped {ChosenCharm.Name}");
-            }
-        }
-
-        if (type == typeof(Weapon))
-        {
-            foreach (Item i in game.Player.EquippedWeapon)
-            {
-                EquippedItemNames.Add(i.Name);
-            }
-
-            string choice = AnsiConsole.Prompt(new SelectionPrompt<string>().Title($"Choose a {type.Name} to unequip").AddChoices(EquippedItemNames.Append("back")));
-
-            Weapon ChosenWeapon = game.Player.EquippedWeapon.Find(i => i.Name == choice);
-            if (ChosenWeapon != null)
-            {
-                game.Player.UnequipWeapon(ChosenWeapon);
-
-                AnsiConsole.Clear();
-                AnsiConsole.MarkupLine($"You unequipped {ChosenWeapon.Name}");
-            }
-        }
-
-        if (type == typeof(Armor))
-        {
-            foreach (Item i in game.Player.EquippedArmor)
-            {
-                EquippedItemNames.Add(i.Name);
-            }
-
-            string choice = AnsiConsole.Prompt(new SelectionPrompt<string>().Title($"Choose a {type.Name} to unequip").AddChoices(EquippedItemNames.Append("back")));
-
-            Armor ChosenArmor = game.Player.EquippedArmor.Find(i => i.Name == choice);
-            if (ChosenArmor != null)
-            {
-                game.Player.UnequipArmor(ChosenArmor);
-
-                AnsiConsole.Clear();
-                AnsiConsole.MarkupLine($"You unequipped {ChosenArmor.Name}");
-            }
-        }
+        AnsiConsole.MarkupLine($"You unequipped {selected.Name}");
     }
 }

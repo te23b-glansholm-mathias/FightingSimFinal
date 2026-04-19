@@ -6,15 +6,5 @@
   "expectedPackageFiles": [
     "C:\\Users\\mathias.glansholm\\.nuget\\packages\\spectre.console\\0.54.0\\spectre.console.0.54.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "message": "Problem reading the cache file c:\\Users\\mathias.glansholm\\Documents\\GitHub\\FightingSimFinal\\ConsoleApp1\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
-      "projectPath": "c:\\Users\\mathias.glansholm\\Documents\\GitHub\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
-      "warningLevel": 1,
-      "filePath": "c:\\Users\\mathias.glansholm\\Documents\\GitHub\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
-      "targetGraphs": []
-    }
-  ]
+  "logs": []
 }
