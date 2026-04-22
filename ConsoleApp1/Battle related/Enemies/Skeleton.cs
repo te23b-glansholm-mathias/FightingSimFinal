@@ -1,8 +1,8 @@
 class Skeleton : Enemy, IRespawnable //enemy should be able to respawn after death
 {
-    private int _originalRawDamage;
-    private int _AttackBuffDamage;
-    private int _turnsForRespawn;
+    private readonly int _originalRawDamage;
+    private readonly int _AttackBuffDamage;
+    private readonly int _turnsForRespawn;
     private int _turnsRemainingUntilRespawn;
     private int _attackBuffTurnsRemaining = 0;
 
@@ -28,24 +28,15 @@ class Skeleton : Enemy, IRespawnable //enemy should be able to respawn after dea
 
     public override void OnDeath()
     {
-        _turnsRemainingUntilRespawn = _turnsForRespawn; 
-        if (_enemySpawner.ActiveEnemies.Count == 0 || _enemySpawner.ActiveEnemies.All(e => e.Health <= 0)) base.OnDeath(); //true death if all enemies are dead
+        _turnsRemainingUntilRespawn = _turnsForRespawn;
+        if (_enemySpawner.ActiveEnemies.Count == 0 || _enemySpawner.ActiveEnemies.All(e => e.Health <= 0)) base.OnDeath(); //true death if all enemies are deads
     }
 
     public override void DoAction(Player target)
     {
-        if (!IsDead) //if not dead attack as normal
-        {
-            if (_attackBuffTurnsRemaining > 0)
-            {
-                RawDamage = _originalRawDamage + _AttackBuffDamage;
-                _attackBuffTurnsRemaining--;
-            }
-            else RawDamage = _originalRawDamage;
+        if (_enemySpawner.ActiveEnemies.Count == 0 || _enemySpawner.ActiveEnemies.All(e => e.Health <= 0)) base.OnDeath(); //true death if all enemies are dead
 
-            base.DoAction(target);
-        }
-        else //if alive
+        if (IsDead) //if dead, handle respawn countdown
         {
             if (_turnsRemainingUntilRespawn <= 0) //respawn if the timer has run out
             {
@@ -55,6 +46,17 @@ class Skeleton : Enemy, IRespawnable //enemy should be able to respawn after dea
             {
                 _turnsRemainingUntilRespawn--;
             }
+        }
+        else //if alive attack as normal
+        {
+            if (_attackBuffTurnsRemaining > 0)
+            {
+                RawDamage = _originalRawDamage + _AttackBuffDamage;
+                _attackBuffTurnsRemaining--;
+            }
+            else RawDamage = _originalRawDamage;
+
+            base.DoAction(target);
         }
     }
 

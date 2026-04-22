@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "wd42eVzD3nQ=",
+  "dgSpecHash": "YeU12ud488M=",
   "success": true,
-  "projectFilePath": "C:\\Users\\mathias.glansholm\\Documents\\GitHub\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
+  "projectFilePath": "c:\\Users\\mathias.glansholm\\Documents\\GitHub\\FightingSimFinal\\ConsoleApp1\\ConsoleApp1.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mathias.glansholm\\.nuget\\packages\\spectre.console\\0.54.0\\spectre.console.0.54.0.nupkg.sha512"
   ],
