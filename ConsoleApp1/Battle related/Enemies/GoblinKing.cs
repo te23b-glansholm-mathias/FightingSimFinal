@@ -25,9 +25,9 @@ class GoblinKing : Goblin
 
     public override void DoAction(Player target)
     {
-        _greedBonus = Gold / _goldNeededForGreedBoost * 5;
+        _greedBonus = Gold / _goldNeededForGreedBoost * 5; //attacks implementing greed gets stronger
         _wealthDefenseBonus = Gold / _goldNeededForWealthDefense * 2;
-        Defense = _originalDefense + _wealthDefenseBonus;
+        Defense = _originalDefense + _wealthDefenseBonus; //bonus defense depending on gold
 
         int pastHealth = target.Health;
         Attack current = _attacksOwned[Random.Shared.Next(0, _attacksOwned.Count)];
@@ -36,7 +36,7 @@ class GoblinKing : Goblin
         current.DoAction(target, this);
 
         int damage = pastHealth - target.Health;
-        StealGold(damage, target);
+        StealGold(damage, target); //steal gold depending on damage
         turn++;
     }
 }

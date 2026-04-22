@@ -67,14 +67,17 @@ class Player : IDamageable  //the player class, which can take damage
         //start with this weaon and arom
         RawSword stick = new("Stick", this);
         RawArmor woodArmor = new("Wood Armor", this);
-        stick.Use();
-        woodArmor.Use();
+        stick.TryUse();
+        woodArmor.TryUse();
 
         //starting items
         ItemsOwned.Add(new HealthPotion("Normal Health Potion", this));
         ItemsOwned.Add(new HealthPotion("Normal Health Potion", this));
         ItemsOwned.Add(new HealthPotion("Normal Health Potion", this));
         ItemsOwned.Add(new HealthPotion("Normal Health Potion", this));
+        ItemsOwned.Add(new BerserkerCharm("Berserker Charm", this));
+        ItemsOwned.Add(new AttackCharm("Attack Charm", this));
+        
     }
 
     //handles health

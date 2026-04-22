@@ -1,6 +1,6 @@
 class Goblin : Enemy
 {
-    public int Gold { get; protected set; }
+    public int Gold { get; protected set; } //goblin specific
 
     public Goblin(string name, int level, EnemySpawner enemySpawner) : base(name, level)
     {
@@ -12,7 +12,7 @@ class Goblin : Enemy
                 _attacksOwned.AddRange(new Slash(), new GoldThrow(this));
                 Health = (int)(46 * (0.6 * (Level - 1) + 1));
                 RawDamage = 6;
-                Gold = 10;
+                Gold = 10; 
                 break;
         }
     }
@@ -26,16 +26,16 @@ class Goblin : Enemy
         ActiveAttacks.Add(current);
         current.DoAction(target, this);
 
-        if (pastGoldCount - Gold == 0)
+        if (pastGoldCount - Gold == 0) //if it didnt use gold on the attack
         {
             int damage = pastHealth - target.Health;
-            StealGold(damage, target);
+            StealGold(damage, target); //after each attack stealgold depending on damage
         }
 
         turn++;
     }
 
-    protected void StealGold(int amount, Player target)
+    protected void StealGold(int amount, Player target) //steal gold from player
     {
         GoldSteal steal = new(amount, this);
         ActiveAttacks.Add(steal);

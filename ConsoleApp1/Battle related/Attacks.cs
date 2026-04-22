@@ -1,11 +1,12 @@
-abstract class Attack(string name)
+abstract class Attack(string name) //all attacks have a name
 {
     public string Name { get; } = name;
-    public string AttackMessage { get; protected set; }
+    public string AttackMessage { get; protected set; } //message after attack performed
 
     public abstract void DoAction(Player target, Enemy sender);
 }
 
+//basic attacks
 class Clash : Attack
 {
     public Clash() : base("Clash") { }
@@ -61,15 +62,14 @@ class BoneSlap : Attack
     }
 }
 
-// Specials
-
+//special attacks
 class Heal(string name, int amount) : Attack(name)
 {
     private int _amount = amount;
 
     public override void DoAction(Player target, Enemy sender)
     {
-        sender.Health += _amount;
+        sender.Health += _amount; //heal the enemy
     }
 }
 
@@ -77,17 +77,17 @@ class SummonEnemy : Attack
 {
     private readonly EnemySpawner EnemySpawner;
     private readonly Type Summon = typeof(Enemy);
-    private string SummonName;
+    private readonly string SummonName;
     private readonly int Amount;
 
-    public SummonEnemy(string preset, EnemySpawner enemySpawner, int amount = 1) : base("Summon Slime")
+    public SummonEnemy(string preset, EnemySpawner enemySpawner, int amount = 1) : base("Summon Slime") //follows a preset to spawn amount of enemies
     {
         Amount = amount;
         EnemySpawner = enemySpawner;
 
         switch (preset)
         {
-            case "Slime (S)":
+            case "Slime (S)": //if to spawn slimes
                 SummonName = preset;
                 Summon = typeof(Slime);
                 break;
@@ -100,7 +100,7 @@ class SummonEnemy : Attack
 
         for (int i = 0; i < Amount; i++)
         {
-            Enemy e = (Enemy)Activator.CreateInstance(Summon, [SummonName, sender.Level, EnemySpawner]);
+            Enemy e = (Enemy)Activator.CreateInstance(Summon, [SummonName, sender.Level, EnemySpawner]); //i dont like this part
             EnemySpawner.ActiveEnemies.Add(e);
         }
     }
@@ -108,7 +108,7 @@ class SummonEnemy : Attack
 
 class GoldThrow : Attack
 {
-    private Goblin _goblin;
+    private Goblin _goblin; //goblin only attack
     public GoldThrow() : base("Gold Throw") { }
 
     public GoldThrow(Goblin goblin) : base("Gold Throw")
@@ -118,12 +118,12 @@ class GoldThrow : Attack
 
     public override void DoAction(Player target, Enemy sender)
     {
-        int _damage = (int)(sender.RawDamage * _goblin.Gold * 0.2 * (0.4 * (sender.Level - 1) + 1));
+        int _damage = (int)(sender.RawDamage * _goblin.Gold * 0.2 * (0.4 * (sender.Level - 1) + 1)); //deals damage based on gold
         if (_damage > 0)
         {
             AttackMessage = $"{sender.Name} uses [red]{Name}[/], spends its own gold,";
             target.TakeDamage(_damage);
-            _goblin.ClearGold();
+            _goblin.ClearGold(); //removes gold
         }
         else
         {
@@ -133,7 +133,7 @@ class GoldThrow : Attack
     }
 }
 
-class GoldSteal : Attack
+class GoldSteal : Attack //steals amount of gold
 {
     private Goblin _goblin;
     private int _amount;
@@ -160,26 +160,25 @@ class GoldSteal : Attack
     }
 }
 
-class BoneSmash(Skeleton skeleton) : Attack("Bone Smash")
+class BoneSmash(Skeleton skeleton) : Attack("Bone Smash") //buffs skeleton damage
 {
     private Skeleton _skeleton = skeleton;
 
     public override void DoAction(Player target, Enemy sender)
     {
-        _skeleton.ActivateBoneSmashBuff();
+        _skeleton.ActivateDamageBuff();
         AttackMessage = $"{sender.Name} uses [red]{Name}[/] and buffs themselves!";
     }
 }
 
-class GreedyStrike(GoblinKing goblinKing) : Attack("Greedy Strike")
+class GreedyStrike(GoblinKing goblinKing) : Attack("Greedy Strike") //deals bonus damage depending greedbonus
 {
     private GoblinKing _goblinKing = goblinKing;
 
     public override void DoAction(Player target, Enemy sender)
     {
         int baseDamage = (int)(sender.RawDamage * 1.5 * (0.4 * (sender.Level - 1) + 1));
-        int goldBonus = _goblinKing.Gold / 10;
-        int totalDamage = baseDamage + goldBonus + _goblinKing.GreedBonus;
+        int totalDamage = baseDamage + _goblinKing.GreedBonus;
 
         AttackMessage = $"{sender.Name} uses [red]{Name}[/]";
         target.TakeDamage(totalDamage);

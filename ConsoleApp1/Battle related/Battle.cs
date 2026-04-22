@@ -1,23 +1,23 @@
-class Battle(Game game, EnemySpawner enemySpawner) : GameState()
+class Battle(Game game, EnemySpawner enemySpawner) : GameState() //the battle state
 {
     private bool _fightStarted = false;
 
     public override void Update()
     {
-        if (!_fightStarted)
+        if (!_fightStarted) //if the fight has not started yet
         {
             StartFight();
             _fightStarted = true;
             return;
         }
 
-        if (!game.Player.IsAlive)
+        if (!game.Player.IsAlive) //if the player dies
         {
             LoseFight();
             return;
         }
 
-        if (enemySpawner.ActiveEnemies.Count == 0)
+        if (enemySpawner.ActiveEnemies.Count == 0) //if all enemies are dead
         {
             WinFight();
             return;
@@ -50,7 +50,7 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
         {
             case "Attack":
                 AttackEnemy();
-                if (enemySpawner.ActiveEnemies.Count > 0) EnemyTurn();
+                if (enemySpawner.ActiveEnemies.Count > 0) EnemyTurn(); //starts the enemies turn if they are still alive
                 break;
 
             case "Use Item":
@@ -58,7 +58,7 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
                 break;
 
             case "Flee":
-                game.GoBack(2);
+                game.GoBack(2); //go back to menu state
                 break;
         }
     }
@@ -66,7 +66,7 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
     private void AttackEnemy()
     {
         Enemy enemy = ChooseEnemy();
-        int PastHealth = enemy.Health;
+        int PastHealth = enemy.Health; //to calculate difference in health
 
         game.Player.Attack(enemy);
         AnsiConsole.WriteLine($"You dealt {PastHealth - enemy.Health} to {enemy.Name}!");
@@ -76,7 +76,7 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
     private Enemy ChooseEnemy()
     {
         List<string> enemyNames = [];
-        foreach (Enemy enemy in enemySpawner.ActiveEnemies)
+        foreach (Enemy enemy in enemySpawner.ActiveEnemies) //for all active enemies
         {
             enemyNames.Add(enemy.Name + $" (HP: {enemy.Health})");
         }
@@ -96,18 +96,18 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
 
         foreach (Enemy enemy in enemySpawner.ActiveEnemies.ToList())
         {
-            if (game.Player.IsAlive)
+            if (game.Player.IsAlive) //keeps attacking as long as the player is alive
             {
                 int pastHealth = game.Player.Health;
 
-                enemy.ActiveAttacks.Clear();
-                enemy.DoAction(game.Player);
+                enemy.ActiveAttacks.Clear(); //clear the last attack
+                enemy.DoAction(game.Player); //perform the action
 
                 foreach (Attack attack in enemy.ActiveAttacks)
                 {
                     int damage = pastHealth - game.Player.Health;
 
-                    if (damage > 0) AnsiConsole.MarkupLine($"{attack.AttackMessage} and dealt {damage} damage");
+                    if (damage > 0) AnsiConsole.MarkupLine($"{attack.AttackMessage} and dealt {damage} damage"); //if the action did damage
                     else AnsiConsole.MarkupLine(attack.AttackMessage);
 
                     pastHealth = game.Player.Health;
@@ -121,7 +121,7 @@ class Battle(Game game, EnemySpawner enemySpawner) : GameState()
     private void WinFight()
     {
         AnsiConsole.Clear();
-        AnsiConsole.WriteLine("You defeated all of the enemies!");
+        AnsiConsole.WriteLine("You defeated all of the enemies!"); //can add further logic here if I want
         Console.ReadKey(true);
         game.GoBack(2);
     }

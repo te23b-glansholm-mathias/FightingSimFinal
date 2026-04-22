@@ -1,6 +1,6 @@
-abstract class Weapon(string name, Player player) : Item(name, player), IEquipable
+abstract class Weapon(string name, Player player) : Item(name, player), IEquipable //main weapon class
 {
-    public override bool Use()
+    public override bool TryUse()
     {
         if (Player.TryEquipWeapon(this))
         {
@@ -15,7 +15,7 @@ abstract class Weapon(string name, Player player) : Item(name, player), IEquipab
     public abstract void RemoveEffect();
 }
 
-class RawSword : Weapon
+class RawSword : Weapon //weapon which only increases raw damage
 {
     readonly int RawDamage = 1;
 

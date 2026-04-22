@@ -1,6 +1,6 @@
 class Slime : Enemy
 {
-    private int _size;
+    private int _size; //slime specific
 
     public Slime(string name, int Level, EnemySpawner enemySpawner) : base(name, Level)
     {
@@ -31,7 +31,7 @@ class Slime : Enemy
         }
     }
 
-    public override void OnDeath()
+    public override void OnDeath() //should split on death depending on size
     {
         switch (_size)
         {
@@ -47,6 +47,6 @@ class Slime : Enemy
                 break;
         }
 
-        _enemySpawner.ActiveEnemies.Remove(this);
+        _enemySpawner.ActiveEnemies.Remove(this); //if smallest size remove itself
     }
 }

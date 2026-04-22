@@ -1,6 +1,6 @@
-abstract class Armor(string name, Player player) : Item(name, player), IEquipable
+abstract class Armor(string name, Player player) : Item(name, player), IEquipable //main armor class
 {
-    public override bool Use()
+    public override bool TryUse()
     {
         if (Player.TryEquipArmor(this))
         {
@@ -15,7 +15,7 @@ abstract class Armor(string name, Player player) : Item(name, player), IEquipabl
     public abstract void RemoveEffect();
 }
 
-class RawArmor : Armor
+class RawArmor : Armor  //armor which only increases defense
 {
     readonly int DefenseIncrease = 1;
 
@@ -35,11 +35,11 @@ class RawArmor : Armor
 
     public override void AddEffect()
     {
-        Player.AddDefense(DefenseIncrease);
+        Player.AddDefense(DefenseIncrease); //adds defense
         UseMessage = $"Your Defense is now +{DefenseIncrease}";
     }
 
-    public override void RemoveEffect()
+    public override void RemoveEffect() //on unequip
     {
         Player.RemoveDefense(DefenseIncrease);
     }

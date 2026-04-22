@@ -1,12 +1,12 @@
-class Skeleton : Enemy, IRespawnable
+class Skeleton : Enemy, IRespawnable //enemy should be able to respawn after death
 {
     private int _originalRawDamage;
-    private int _BoneSmashBuffDamage;
+    private int _AttackBuffDamage;
     private int _turnsForRespawn;
     private int _turnsRemainingUntilRespawn;
-    private int _boneSmashBuffTurnsRemaining = 0;
+    private int _attackBuffTurnsRemaining = 0;
 
-    public int BoneSmashBuffTurnsRemaining => _boneSmashBuffTurnsRemaining;
+    public int AttackBuffTurnsRemaining => _attackBuffTurnsRemaining;
 
     public Skeleton(string name, int level, EnemySpawner enemySpawner) : base(name, level)
     {
@@ -19,7 +19,7 @@ class Skeleton : Enemy, IRespawnable
                 _attacksOwned.AddRange(new BoneSlap(), new BoneSmash(this));
                 Health = (int)(20 * (0.6 * (Level - 1) + 1));
                 _originalRawDamage = (int)(6 * (0.6 * (Level - 1) + 1));
-                _BoneSmashBuffDamage = (int)(2 * (0.6 * (Level - 1) + 1));
+                _AttackBuffDamage = (int)(2 * (0.6 * (Level - 1) + 1));
                 break;
         }
 
@@ -28,26 +28,26 @@ class Skeleton : Enemy, IRespawnable
 
     public override void OnDeath()
     {
-        _turnsRemainingUntilRespawn = _turnsForRespawn;
-        if (_enemySpawner.ActiveEnemies.Count == 0 || _enemySpawner.ActiveEnemies.All(e => e.Health <= 0)) base.OnDeath();
+        _turnsRemainingUntilRespawn = _turnsForRespawn; 
+        if (_enemySpawner.ActiveEnemies.Count == 0 || _enemySpawner.ActiveEnemies.All(e => e.Health <= 0)) base.OnDeath(); //true death if all enemies are dead
     }
 
     public override void DoAction(Player target)
     {
-        if (!IsDead)
+        if (!IsDead) //if not dead attack as normal
         {
-            if (_boneSmashBuffTurnsRemaining > 0)
+            if (_attackBuffTurnsRemaining > 0)
             {
-                RawDamage = _originalRawDamage + _BoneSmashBuffDamage;
-                _boneSmashBuffTurnsRemaining--;
+                RawDamage = _originalRawDamage + _AttackBuffDamage;
+                _attackBuffTurnsRemaining--;
             }
             else RawDamage = _originalRawDamage;
 
             base.DoAction(target);
         }
-        else
+        else //if alive
         {
-            if (_turnsRemainingUntilRespawn <= 0)
+            if (_turnsRemainingUntilRespawn <= 0) //respawn if the timer has run out
             {
                 Respawn(target);
             }
@@ -58,9 +58,9 @@ class Skeleton : Enemy, IRespawnable
         }
     }
 
-    public void ActivateBoneSmashBuff()
+    public void ActivateDamageBuff() //stackable
     {
-        _boneSmashBuffTurnsRemaining += 2;
+        _attackBuffTurnsRemaining += 2;
     }
 
     public bool IsDead => Health <= 0;
